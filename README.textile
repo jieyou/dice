@@ -1,0 +1,114 @@
+h1. dice —— 3d色子（或称骰子？）
+ 
+h2. 一个css3 3d动画效果的色子
+
+"在线demo":http://blog.youyo.name/others/dice/
+
+* 完全效果（完全流畅的3d动画、阴影、圆角）：Chrome\Firefox\Safari\iOS Safari 6.0+\Android Browser 4.4+
+* 较为流畅的3d动画、阴影、圆角：Android Browser 3.0+
+* 无3d动画（直接展示结果），有圆角：IE 9.0+
+* 无3d动画（直接展示结果），无圆角：IE 6.0+
+
+h2. 快速上手
+
+h3. 为你的色子设定一个容器DOM
+
+<pre>
+<style>
+	#area{
+		width: 100%;
+		height: 200px;
+	}
+</style>
+<div id="area"></div>
+</pre>
+
+我们将在容器的中心放置色子，所以通常情况下请确保容器大小比色子的大
+
+h3. 初始化你的色子
+
+首先我们来一个最简单的方式，不指定任何特殊的设置
+
+<pre>
+var myDice = dice(document.getElementById('area'))
+</pre>
+
+参数是容器DOM的id，这样色子就展示出来了
+
+h3. 旋转色子
+
+用你上一步得到的色子对象实例，调用roll方法即可，你可以指定色子需要旋转得到什么结果
+
+<pre>
+myDice.roll(5)
+</pre>
+
+那么色子将在旋转后，最终得到，5那一面朝向用户
+
+h2. 高级用法
+
+h3. 定制色子的相关参数
+
+你已经注意到了，初始化一个色子的时候，第一个参数是外层容器的dom。
+它接受的第二个参数是配置对象
+
+<pre>
+var myNewDice = dice(document.getElementById('newArea'),{
+	edgeLength:100 // 色子其实是个正方体，它的棱长。类型为数字，单位像素
+	,radius:5 // 12个顶点的圆角，一般设置为棱长的1/20为合适，因为这是一个空心正方体，实际上只有6个面，所以不宜设置过大，避免视线穿透。类型为数字，单位像素
+	,hasShadow:true // 色子下面是否有阴影，类型为布尔
+	,shadowTop:75 // 阴影离外层容器DOM顶部的距离，类型为数字，单位百分之（如设置为80则为80%）
+	,keepAnimationTime:3000 // 色子在旋转的时候首先会匀速旋转一段时间，这里定义这个时长。类型为数字，单位毫秒
+	,endAnimationTime:1000 // 上述匀速旋转完毕后会逐渐减速停下来，这里定义这个减速到停下的时长。类型为数字，单位毫秒
+	,onKeepAnimationEnd:function(result){} // 在匀速旋转完毕后的回调函数，其中this指向当前色子的实例，第一个参数本次旋转的结果。类型函数
+	,onEndAnimationEnd:function(result){} // 在减速并停止后的回调函数，其中this指向当前色子的实例，第一个参数本次旋转的结果。类型函数
+	,onNoAnimationEnd:function(result){} // 在IE、Android Browser 3.0以下（不含）的浏览器中，没有动画效果，色子在“旋转”时会直接展示结果，在展示出结果面后的回调函数，其中this指向当前色子的实例，第一个参数本次旋转的结果。类型函数
+	,onRollEnd:function(result){} // 不论是否有动画效果和任何浏览器，在一次旋转完毕后的回调函数，其中this指向当前色子的实例，第一个参数本次旋转的结果。类型函数
+})
+</pre>
+
+h3. 不指定旋转结果或随机在多个数字中随机出现一个结果
+
+roll方法接受一个参数，它可以是一个数字（就是你在“快速上手——旋转色子”中看到的那样）
+它还可以接受一个数组，数组中的每一项是1~6数字中的一个，如
+
+<pre>
+myDice.roll([1,2,4]) // return 出现的结果数字
+</pre>
+
+则会在1,2,4三个数字中等概率地出现结果
+如果参数为空，将在1,2,3,4,5,6中等概率地出现结果
+roll方法本身将返回本次旋转的结果数字
+
+h3. 暂停旋转
+
+你可以在色子旋转动画进行的过程中暂停旋转，通过调用stop方法
+
+<pre>
+myDice.stop()
+</pre>
+
+这样色子将会定格在调用时动画的中间状态，这可以方便调试和做很多你认为有趣的事情
+
+h2. License
+
+所有代码遵循 "MIT License":http://www.opensource.org/licenses/mit-license.php 。也就是说你可以自由地做任何你想做的事情。只是不能在代码中移除我的名字。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+	<title>jieyou 3d dice demo</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<style>
+		html, body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			background: #088801;
+		}
+		#operation {
+			width: 100%;
+			height: 40px;
+			font-size: 24px;
+			line-height: 40px;
+			text-align: center;
+		}
+		#area {
+			width: 100%;
+			height:200px;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="operation">
+		<input type="text" id="result_input" value="1,2,3,4,5,6" />
+		<button id="roll">roll</button>
+		<button id="stop">stop</button>
+	</div>
+	<div id="area"></div>
+	<script src="http://bcs.duapp.com/jieyou-storage/consoleEnable.js"></script>
+	<script src="dice.js"></script>
+	<script>
+		function g(id){
+			return document.getElementById(id)
+		}
+
+		function on(dom,event,func){
+			if(dom.addEventListener){
+				dom.addEventListener(event,func,false)
+			}else{
+				dom.attachEvent('on'+event,func)
+			}
+		}
+
+		var myDice = dice(document.getElementById('area'),{
+			// edgeLength:100
+			// ,radius:5
+			// ,
+			// hasShadow:false,
+			// shadowTop:90,
+			onKeepAnimationEnd:function(result){
+				console.log('onKeepAnimationEnd,result:'+result+',time:'+(new Date).getTime())
+			}
+			,onEndAnimationEnd:function(result){
+				console.log('onEndAnimationEnd,result:'+result+',time:'+(new Date).getTime())
+			}
+		})
+		on(g('roll'),'click',function(){
+			myDice.roll(g('result_input').value.split(','))
+		})
+		on(g('stop'),'click',function(){
+			myDice.stop()
+		})
+
+	</script>
+</body>
+</html>
