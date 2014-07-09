@@ -108,14 +108,28 @@
 	}
 
 	// 检测是否支持 `transform-style:preserve-3d`
-	function supportPreserve3d(prefixWord){
-		var div = document.createElement('DIV')
-			,styleName = getRightJsStyleName('transformStyle',prefixWord)
-		div.style[styleName] = 'preserve-3d'
-		return !!div.style[styleName].length
-	}
+	var supportPreserve3d = (function(prefixWord){
+		// 安卓3.0以下（不含）通过此方法无法检测（即使在不支持的情况下，使用getComputedStyle或直接div.style[styleName]还是会返回'preserve-3d'），这里写搓一点
+		var isAndroid = navigator.userAgent.match(/(Android);?[\s\/]+([\d.]+)?/)
+			,version
+			,isAndorid3Below = false
+			,div = document.createElement('DIV')
+		if(isAndroid){
+			version = parseFloat(isAndroid[2])
+			isAndorid3Below = !isNaN(version) && version < 3
+		}
+		return function(prefixWord){
+			var styleName
+			if(isAndorid3Below){
+				return false
+			}
+			styleName = getRightJsStyleName('transformStyle',prefixWord)
+			div.style[styleName] = 'preserve-3d'
+			return !!div.style[styleName].length
+		}
+	})()
 
-	// 确定制造商前缀及支持preserve-3d情况，prefix为null为不支持3d动画
+	// 确定制造商前缀及支持preserve-3d情况，不光是有前缀，同时支持3d动画时prefix才不为null
 	var prefix
 	var prefixWord
 	;(function(style,string){
@@ -204,6 +218,7 @@
 			// var a = 'rotateZ(' + dice.zAngle + 'deg) rotateX(' + dice.xAngle + 'deg) rotateY(' + dice.yAngle +'deg)'
 			// (prefix==='-moz-'?'':prefix)+'transform'
 			css(dice.wrapper,getRightJsStyleName('transform',prefixWord)+'','rotate(' + dice.zAngle + 'deg) rotateX(' + dice.xAngle + 'deg) rotateY(' + dice.yAngle +'deg)')
+			// todo:可以顺时针转或逆时针，也就是angle既可以+10，也可以-10
 			dice.curRollIsRotateX?dice.yAngle = 0:dice.xAngle = 0
 			dice.zAngle = dice.zAngle>360? dice.zAngle-360 : dice.zAngle+10
 			// x与y任意旋转一个即可，随机一下
@@ -228,16 +243,26 @@
 	}
 
 	function noAnimation(dice){
+		var circles
 		forEach.call([1,2,3,4,5,6],function(e){
 			var face = dice['face'+e]
 			if(e === dice.result){
+				circles = face.getElementsByTagName('DIV') // IE8-  不支持getElementsByClassname，好在除此之外没有别的元素了
+				forEach.call(circles,function(c){
+					c.style.display = 'none'
+				})
 				face.style.zIndex = '2000'
 			}else{
 				face.style.zIndex = '1000'
 			}
 		})
-		dice._onNoAnimationEnd()
-		dice._onRollEnd()
+		setTimeout(function(){
+			forEach.call(circles,function(c){
+				c.style.display = 'block'
+			})
+			dice._onNoAnimationEnd()
+			dice._onRollEnd()
+		},200) // todo:时间可配
 	}
 
 	function Dice(container,formattedConfig){

@@ -6,7 +6,7 @@ h2. 一个css3 3d动画效果的色子
 
 * 完全效果（完全流畅的3d动画、阴影、圆角）：Chrome\Firefox\Safari\iOS Safari 6.0+\Android Browser 4.4+
 * 较为流畅的3d动画、阴影、圆角：Android Browser 3.0+
-* 无3d动画（直接展示结果），有圆角：IE 9.0+
+* 无3d动画（直接展示结果），有圆角：IE 9.0+\Android Browser 2.0+
 * 无3d动画（直接展示结果），无圆角：IE 6.0+
 
 h2. 快速上手
