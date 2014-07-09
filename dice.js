@@ -108,11 +108,13 @@
 	}
 
 	// 检测是否支持 `transform-style:preserve-3d`
-	var supportPreserve3d = (function(prefixWord){
+	var supportPreserve3d = (function(){
 		// 安卓3.0以下（不含）通过此方法无法检测（即使在不支持的情况下，使用getComputedStyle或直接div.style[styleName]还是会返回'preserve-3d'），这里写搓一点
+		// IE均不支持，但IE9无法通过此法来检测，这里写搓一点
 		var isAndroid = navigator.userAgent.match(/(Android);?[\s\/]+([\d.]+)?/)
 			,version
 			,isAndorid3Below = false
+			,isIE = /MSIE/i.test(navigator.userAgent)
 			,div = document.createElement('DIV')
 		if(isAndroid){
 			version = parseFloat(isAndroid[2])
@@ -120,7 +122,7 @@
 		}
 		return function(prefixWord){
 			var styleName
-			if(isAndorid3Below){
+			if(isAndorid3Below || isIE){
 				return false
 			}
 			styleName = getRightJsStyleName('transformStyle',prefixWord)
@@ -139,7 +141,7 @@
 		}else if(typeof style.MozTransform === string && supportPreserve3d('Moz')){
 			prefix = '-moz-'
 			prefixWord = 'Moz'
-		}else if(typeof style.msTransform === string && supportPreserve3d('ms')){ // IE10 也不支持 所需关键属性 `transform-style:preserve-3d` 故暂时不兼容IE
+		}else if(typeof style.msTransform === string && supportPreserve3d('ms')){ // IE10及以下 都不支持 所需关键属性 `transform-style:preserve-3d` 故暂时不兼容IE
 			prefix = '-ms-'
 			prefixWord = 'ms'
 		}else if(typeof style.transform === string && supportPreserve3d('')){
