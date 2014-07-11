@@ -207,6 +207,7 @@
 	}
 
 	function keepAnimation(dice){
+		// 目前firefox 30 在第二次roll的时候keepAnimation阶段显示不正常或没有动作，暂时没有办法修复
 		dice.dtime = new Date().getTime() - dice.stime
 		if(dice.dtime>dice.keepAnimationTime){
 			dice._onKeepAnimationEnd()
@@ -219,7 +220,7 @@
 			})
 			// var a = 'rotateZ(' + dice.zAngle + 'deg) rotateX(' + dice.xAngle + 'deg) rotateY(' + dice.yAngle +'deg)'
 			// (prefix==='-moz-'?'':prefix)+'transform'
-			css(dice.wrapper,getRightJsStyleName('transform',prefixWord)+'','rotate(' + dice.zAngle + 'deg) rotateX(' + dice.xAngle + 'deg) rotateY(' + dice.yAngle +'deg)')
+			css(dice.wrapper,getRightJsStyleName('transform',prefixWord),'rotate(' + dice.zAngle + 'deg) rotateX(' + dice.xAngle + 'deg) rotateY(' + dice.yAngle +'deg)')
 			// todo:可以顺时针转或逆时针，也就是angle既可以+10，也可以-10
 			dice.curRollIsRotateX?dice.yAngle = 0:dice.xAngle = 0
 			dice.zAngle = dice.zAngle>360? dice.zAngle-360 : dice.zAngle+10
@@ -305,7 +306,8 @@
 				// ,'boxShadow': '0 0 '+t.edgeLength+'px '+t.edgeLength*35/100+'px rgba(0, 0, 0, 0.7)'
 				,'marginLeft': '-'+t.edgeLength*2/10+'px'
 			})
-			css(t.shadow,getRightJsStyleName('boxShadow',prefixWord),'0 0 '+t.edgeLength+'px '+t.edgeLength*35/100+'px rgba(0, 0, 0, 0.7)')
+			// firefox 30 不认识 -moz-box-shadow，但认识box-shadow
+			css(t.shadow,prefixWord==='Moz'?'boxShadow':getRightJsStyleName('boxShadow',prefixWord),'0 0 '+t.edgeLength+'px '+t.edgeLength*35/100+'px rgba(0, 0, 0, 0.7)')
 			t.shadow.className = 'dice_shadow'
 			container.appendChild(t.shadow)
 		}

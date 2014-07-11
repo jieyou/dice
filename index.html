@@ -26,10 +26,6 @@
 			height:200px;
 		}
 	</style>
-	<script>
-	// 这块与本项目无关，测试一下log能不能发出去
-!function(){function b(a,b,c){a.addEventListener?a.addEventListener(b,c,!1):a.attachEvent("on"+b,c)}function c(){var b=location.href.split("?"),c=[],d=[];return b.shift(),c=b.join("&").split("&"),a.call(c,function(a){a&&d.push(a)}),d.join("&")}var a=Array.prototype.forEach||function(a){for(var b=0,c=this,d=c.length;d>b;b++)a.call(c[b],c[b],b)};b(window,"load",function(){var a="__log__"+(new Date).getTime(),b=window[a]=new Image;b.onload=b.onerror=function(){window[a]=null},b.src="http://map.baidu.com/newmap/static/common/images/transparent.gif?"+c(),b=null})}();
-	</script>
 </head>
 
 <body>
@@ -60,6 +56,7 @@
 			// ,
 			// hasShadow:false,
 			// shadowTop:90,
+			// keepAnimationTime:10000,
 			onKeepAnimationEnd:function(result){
 				console.log('onKeepAnimationEnd,result:'+result+',time:'+(new Date).getTime())
 			}
