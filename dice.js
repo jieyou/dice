@@ -111,10 +111,12 @@
 	var supportPreserve3d = (function(){
 		// 安卓3.0以下（不含）通过此方法无法检测（即使在不支持的情况下，使用getComputedStyle或直接div.style[styleName]还是会返回'preserve-3d'），这里写搓一点
 		// IE均不支持，但IE9无法通过此法来检测，这里写搓一点
+		// 后来发现UC也有问题，这里写搓一点
 		var isAndroid = navigator.userAgent.match(/(Android);?[\s\/]+([\d.]+)?/)
 			,version
 			,isAndorid3Below = false
 			,isIE = /MSIE/i.test(navigator.userAgent)
+			,isUC = /UCBrowser/i.test(navigator.userAgent)
 			,div = document.createElement('DIV')
 		if(isAndroid){
 			version = parseFloat(isAndroid[2])
@@ -122,7 +124,7 @@
 		}
 		return function(prefixWord){
 			var styleName
-			if(isAndorid3Below || isIE){
+			if(isAndorid3Below || isIE || isUC){
 				return false
 			}
 			styleName = getRightJsStyleName('transformStyle',prefixWord)
